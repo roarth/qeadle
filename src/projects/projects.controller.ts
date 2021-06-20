@@ -7,9 +7,12 @@ import {
   Patch,
   Post,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { GetProjectsFilterDto } from './dto/get-projects-filter.dto';
+import { ProjectStatusValidationPipe } from './pipes/project-status-validation.pipe';
 import { Project, ProjectStatus } from './project.model';
 import { ProjectsService } from './projects.service';
 
@@ -18,7 +21,9 @@ export class ProjectsController {
   constructor(private projectsService: ProjectsService) {}
 
   @Get()
-  getProjects(@Query() filterDto: GetProjectsFilterDto): Project[] {
+  getProjects(
+    @Query(ValidationPipe) filterDto: GetProjectsFilterDto,
+  ): Project[] {
     if (Object.keys(filterDto).length) {
       return this.projectsService.getProjectsWithFilters(filterDto);
     } else {
@@ -32,6 +37,7 @@ export class ProjectsController {
   }
 
   @Post()
+  @UsePipes(ValidationPipe)
   createProject(@Body() createProjectDto: CreateProjectDto): Project {
     return this.projectsService.createProject(createProjectDto);
   }
@@ -44,7 +50,7 @@ export class ProjectsController {
   @Patch('/:id/status')
   updateProjectStatus(
     @Param('id') id: string,
-    @Body('status') status: ProjectStatus,
+    @Body('status', ProjectStatusValidationPipe) status: ProjectStatus,
   ): Project {
     return this.projectsService.updateProjectStatus(id, status);
   }
