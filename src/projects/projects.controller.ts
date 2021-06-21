@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -13,7 +14,8 @@ import {
 import { CreateProjectDto } from './dto/create-project.dto';
 import { GetProjectsFilterDto } from './dto/get-projects-filter.dto';
 import { ProjectStatusValidationPipe } from './pipes/project-status-validation.pipe';
-import { Project, ProjectStatus } from './project.model';
+import { ProjectStatus } from './project-status.enum';
+import { Project } from './project.entity';
 import { ProjectsService } from './projects.service';
 
 @Controller('projects')
@@ -23,35 +25,35 @@ export class ProjectsController {
   @Get()
   getProjects(
     @Query(ValidationPipe) filterDto: GetProjectsFilterDto,
-  ): Project[] {
-    if (Object.keys(filterDto).length) {
-      return this.projectsService.getProjectsWithFilters(filterDto);
-    } else {
-      return this.projectsService.getAllProjects();
-    }
+  ): Promise<Project[]> {
+    return this.projectsService.getProjects(filterDto);
   }
 
   @Get('/:id')
-  getProjectById(@Param('id') id: string): Project {
+  getProjectById(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<Project> {
     return this.projectsService.getProjectById(id);
   }
 
   @Post()
   @UsePipes(ValidationPipe)
-  createProject(@Body() createProjectDto: CreateProjectDto): Project {
+  createProject(@Body() createProjectDto: CreateProjectDto): Promise<Project> {
     return this.projectsService.createProject(createProjectDto);
   }
 
   @Delete('/:id')
-  deleteProject(@Param('id') id: string) {
+  deleteProject(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<void> {
     return this.projectsService.deleteProject(id);
   }
 
   @Patch('/:id/status')
   updateProjectStatus(
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body('status', ProjectStatusValidationPipe) status: ProjectStatus,
-  ): Project {
+  ): Promise<Project> {
     return this.projectsService.updateProjectStatus(id, status);
   }
 }
