@@ -8,9 +8,11 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { GetProjectsFilterDto } from './dto/get-projects-filter.dto';
 import { ProjectStatusValidationPipe } from './pipes/project-status-validation.pipe';
@@ -19,6 +21,7 @@ import { Project } from './project.entity';
 import { ProjectsService } from './projects.service';
 
 @Controller('projects')
+@UseGuards(AuthGuard())
 export class ProjectsController {
   constructor(private projectsService: ProjectsService) {}
 
