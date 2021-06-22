@@ -1,3 +1,6 @@
+import { InternalServerErrorException, Logger } from '@nestjs/common';
+import { GetUser } from 'src/auth/get-user.decorator';
+import { User } from 'src/auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { GetProjectsFilterDto } from './dto/get-projects-filter.dto';
@@ -6,7 +9,12 @@ import { Project } from './project.entity';
 
 @EntityRepository(Project)
 export class ProjectRepository extends Repository<Project> {
-  async getProjects(filterDto: GetProjectsFilterDto): Promise<Project[]> {
+  private logger = new Logger('ProjectRepository');
+
+  async getProjects(
+    filterDto: GetProjectsFilterDto,
+    @GetUser() user: User,
+  ): Promise<Project[]> {
     const { status, search } = filterDto;
     const query = this.createQueryBuilder('project');
 
@@ -21,11 +29,24 @@ export class ProjectRepository extends Repository<Project> {
       );
     }
 
-    const projects = await query.getMany();
-    return projects;
+    try {
+      const projects = await query.getMany();
+      return projects;
+    } catch (error) {
+      this.logger.error(
+        `Failed to get Projects for "${user.email}", Filters: ${JSON.stringify(
+          filterDto,
+        )}`,
+        error.stack,
+      );
+      throw new InternalServerErrorException();
+    }
   }
 
-  async createProject(createProjectDto: CreateProjectDto): Promise<Project> {
+  async createProject(
+    createProjectDto: CreateProjectDto,
+    @GetUser() user: User,
+  ): Promise<Project> {
     const { name, description } = createProjectDto;
 
     const project = new Project();
@@ -33,8 +54,23 @@ export class ProjectRepository extends Repository<Project> {
     project.description = description;
     project.status = ProjectStatus.OPEN;
 
-    await project.save();
+    try {
+      await project.save();
+      this.logger.verbose(
+        `Project successfully created by "${
+          user.email
+        }". Data: ${JSON.stringify(project)}`,
+      );
 
-    return project;
+      return project;
+    } catch (error) {
+      this.logger.error(
+        `Failed to create Project for "${user.email}", Data: ${JSON.stringify(
+          createProjectDto,
+        )}`,
+        error.stack,
+      );
+      throw new InternalServerErrorException();
+    }
   }
 }
