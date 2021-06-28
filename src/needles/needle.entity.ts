@@ -6,10 +6,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ProjectStatus } from './project-status.enum';
+import { NeedleType } from './needle-type.enum';
 
 @Entity()
-export class Project extends BaseEntity {
+export class Needle extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -20,11 +20,5 @@ export class Project extends BaseEntity {
   updated: Date;
 
   @Column()
-  name: string;
-
-  @Column()
-  description: string;
-
-  @Column()
-  status: ProjectStatus;
+  type: NeedleType;
 }
