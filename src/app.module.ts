@@ -6,7 +6,12 @@ import { AuthModule } from './auth/auth.module';
 import { NeedlesModule } from './needles/needles.module';
 
 @Module({
-  imports: [ProjectsModule, TypeOrmModule.forRoot(typeOrmConfig), AuthModule, NeedlesModule],
+  imports: [
+    ProjectsModule,
+    TypeOrmModule.forRoot(typeOrmConfig),
+    AuthModule,
+    NeedlesModule,
+  ],
   controllers: [],
   providers: [],
 })
