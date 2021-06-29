@@ -68,4 +68,23 @@ export class NeedleRepository extends Repository<Needle> {
       throw new InternalServerErrorException();
     }
   }
+
+  async getNeedlesStats() {
+    const query = await this.createQueryBuilder('needle')
+      .select('needle.type AS type')
+      .addSelect('COUNT(needle.type) AS count')
+      .groupBy('needle.type')
+      .getRawMany();
+    try {
+      const stats = await query;
+      return stats;
+    } catch (error) {
+      this.logger.error(
+        `Failed
+        )}`,
+        error.stack,
+      );
+      throw new InternalServerErrorException();
+    }
+  }
 }

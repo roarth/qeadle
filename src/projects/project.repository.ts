@@ -73,4 +73,23 @@ export class ProjectRepository extends Repository<Project> {
       throw new InternalServerErrorException();
     }
   }
+
+  async getProjectsStats() {
+    const query = await this.createQueryBuilder('project')
+      .select('project.status AS status')
+      .addSelect('COUNT(project.status) AS count')
+      .groupBy('project.status')
+      .getRawMany();
+    try {
+      const projects = await query;
+      return projects;
+    } catch (error) {
+      this.logger.error(
+        `Failed
+        )}`,
+        error.stack,
+      );
+      throw new InternalServerErrorException();
+    }
+  }
 }

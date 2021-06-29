@@ -60,4 +60,8 @@ export class ProjectsService {
     this.logger.verbose(`Project with id "${id}" successfully updated`);
     return project;
   }
+
+  async getProjectsStats() {
+    return this.projectRepository.getProjectsStats();
+  }
 }

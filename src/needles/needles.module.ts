@@ -9,5 +9,6 @@ import { NeedlesService } from './needles.service';
   imports: [TypeOrmModule.forFeature([NeedleRepository]), AuthModule],
   controllers: [NeedlesController],
   providers: [NeedlesService],
+  exports: [NeedlesService],
 })
 export class NeedlesModule {}

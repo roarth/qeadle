@@ -28,4 +28,8 @@ export class NeedlesService {
   ): Promise<Needle> {
     return this.needleRepository.createNeedle(createNeedleDto, user);
   }
+
+  async getNeedlesStats() {
+    return this.needleRepository.getNeedlesStats();
+  }
 }

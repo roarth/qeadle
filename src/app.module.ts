@@ -4,6 +4,7 @@ import { typeOrmConfig } from './config/typeorm.config';
 import { ProjectsModule } from './projects/projects.module';
 import { AuthModule } from './auth/auth.module';
 import { NeedlesModule } from './needles/needles.module';
+import { StatsModule } from './stats/stats.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { NeedlesModule } from './needles/needles.module';
     TypeOrmModule.forRoot(typeOrmConfig),
     AuthModule,
     NeedlesModule,
+    StatsModule,
   ],
   controllers: [],
   providers: [],
