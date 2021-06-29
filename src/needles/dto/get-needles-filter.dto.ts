@@ -8,11 +8,11 @@ export class GetNeedlesFilterDto {
   @IsIn([NeedleType.CYPRESS, NeedleType.POSTMAN])
   type: NeedleType;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsIn([NeedleResult.SUCCESS, NeedleResult.FAILURE, NeedleResult.UNKNOWN])
   result: NeedleResult;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsIn([NeedleEnvironment.CI, NeedleEnvironment.LOCAL])
   environment: NeedleEnvironment;
 

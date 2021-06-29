@@ -20,9 +20,6 @@ export class Needle extends BaseEntity {
   @CreateDateColumn()
   created: Date;
 
-  @UpdateDateColumn()
-  updated: Date;
-
   @Column()
   type: NeedleType;
 

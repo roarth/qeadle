@@ -15,7 +15,7 @@ export class NeedleRepository extends Repository<Needle> {
     filterDto: GetNeedlesFilterDto,
     @GetUser() user: User,
   ): Promise<Needle[]> {
-    const { type, search } = filterDto;
+    const { type, search, result, environment } = filterDto;
     const query = this.createQueryBuilder('needle');
 
     if (type) {
@@ -24,6 +24,16 @@ export class NeedleRepository extends Repository<Needle> {
 
     if (search) {
       query.andWhere('needle.type LIKE :search', { search: `%${search}%` });
+    }
+
+    if (result) {
+      query.andWhere('needle.result = :result', { result: result });
+    }
+
+    if (environment) {
+      query.andWhere('needle.environment = :environment', {
+        environment: environment,
+      });
     }
 
     try {
