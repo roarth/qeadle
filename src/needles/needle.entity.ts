@@ -1,12 +1,16 @@
+import { Project } from 'src/projects/project.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { NeedleType } from './needle-type.enum';
+import { NeedleEnvironment } from './enum/needle-environment.enum';
+import { NeedleResult } from './enum/needle-result.enum';
+import { NeedleType } from './enum/needle-type.enum';
 
 @Entity()
 export class Needle extends BaseEntity {
@@ -21,4 +25,13 @@ export class Needle extends BaseEntity {
 
   @Column()
   type: NeedleType;
+
+  @Column()
+  result: NeedleResult;
+
+  @Column()
+  environment: NeedleEnvironment;
+
+  @ManyToOne(() => Project, (project) => project.needles, { eager: false })
+  project: Project;
 }

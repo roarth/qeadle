@@ -1,5 +1,5 @@
 import { BadRequestException, PipeTransform } from '@nestjs/common';
-import { NeedleType } from '../needle-type.enum';
+import { NeedleType } from '../enum/needle-type.enum';
 
 export class NeedleTypeValidationPipe implements PipeTransform {
   readonly allowedTypes = [NeedleType.CYPRESS, NeedleType.POSTMAN];

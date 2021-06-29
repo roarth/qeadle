@@ -1,8 +1,11 @@
+import { Exclude } from 'class-transformer';
+import { Needle } from 'src/needles/needle.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -27,4 +30,7 @@ export class Project extends BaseEntity {
 
   @Column()
   status: ProjectStatus;
+
+  @OneToMany(() => Needle, (needle) => needle.project, { eager: true })
+  needles: Needle[];
 }

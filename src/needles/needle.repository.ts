@@ -43,10 +43,14 @@ export class NeedleRepository extends Repository<Needle> {
   async createNeedle(
     createNeedleDto: CreateNeedleDto,
     @GetUser() user: User,
+    project: Project,
   ): Promise<Needle> {
-    const { type } = createNeedleDto;
+    const { type, result, environment } = createNeedleDto;
 
     const needle = new Needle();
+    needle.project = project;
+    needle.result = result;
+    needle.environment = environment;
     needle.type = type;
 
     try {
