@@ -1,5 +1,4 @@
-import { Exclude } from 'class-transformer';
-import { Needle } from 'src/needles/needle.entity';
+import { Needle } from '../needles/needle.entity';
 import {
   BaseEntity,
   Column,

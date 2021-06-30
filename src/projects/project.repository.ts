@@ -1,5 +1,4 @@
 import { InternalServerErrorException, Logger } from '@nestjs/common';
-import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -13,7 +12,7 @@ export class ProjectRepository extends Repository<Project> {
 
   async getProjects(
     filterDto: GetProjectsFilterDto,
-    @GetUser() user: User,
+    user: User,
   ): Promise<Project[]> {
     const { status, search } = filterDto;
     const query = this.createQueryBuilder('project');
@@ -45,7 +44,7 @@ export class ProjectRepository extends Repository<Project> {
 
   async createProject(
     createProjectDto: CreateProjectDto,
-    @GetUser() user: User,
+    user: User,
   ): Promise<Project> {
     const { name, description } = createProjectDto;
 

@@ -1,4 +1,4 @@
-import { Project } from 'src/projects/project.entity';
+import { Project } from '../projects/project.entity';
 import {
   BaseEntity,
   Column,
@@ -6,7 +6,6 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 import { NeedleEnvironment } from './enum/needle-environment.enum';
 import { NeedleResult } from './enum/needle-result.enum';

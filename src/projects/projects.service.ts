@@ -1,6 +1,5 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { GetProjectsFilterDto } from './dto/get-projects-filter.dto';
@@ -18,7 +17,7 @@ export class ProjectsService {
 
   async getProjects(
     filterDto: GetProjectsFilterDto,
-    @GetUser() user: User,
+    user: User,
   ): Promise<Project[]> {
     return this.projectRepository.getProjects(filterDto, user);
   }
@@ -34,7 +33,7 @@ export class ProjectsService {
 
   async createProject(
     createProjectDto: CreateProjectDto,
-    @GetUser() user: User,
+    user: User,
   ): Promise<Project> {
     return this.projectRepository.createProject(createProjectDto, user);
   }
