@@ -10,6 +10,8 @@ const mockUser = { email: 'test@qeadle.io' };
 const mockProjectsRepository = () => ({
   getProjects: jest.fn(),
   findOne: jest.fn(),
+  createProject: jest.fn(),
+  delete: jest.fn(),
 });
 
 describe('ProjectsService', () => {
@@ -76,11 +78,44 @@ describe('ProjectsService', () => {
         description: 'Test desc',
       };
       const result = await projectsService.createProject(createProjectDto);
-      expect(projectRepository.createProject).toHaveBeenCalledWith(
-        createProjectDto,
-        mockUser,
-      );
       expect(result).toEqual('someProject');
+    });
+  });
+
+  describe('deleteProject', () => {
+    it('calls projectRepository.deleteProject() to delete a project', async () => {
+      projectRepository.delete.mockResolvedValue({ affected: 1 });
+      expect(projectRepository.delete).not.toHaveBeenCalled();
+      await projectsService.deleteProject(1);
+      expect(projectRepository.delete).toHaveBeenCalledWith(1);
+    });
+
+    it('throws an error as project could not be found', () => {
+      projectRepository.delete.mockResolvedValue({ affected: 0 });
+      expect(projectsService.deleteProject(1, mockUser)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
+  describe('updateProjectStatus', () => {
+    it('updates a project status', async () => {
+      const save = jest.fn().mockResolvedValue(true);
+
+      projectsService.getProjectById = jest.fn().mockResolvedValue({
+        status: ProjectStatus.OPEN,
+        save,
+      });
+
+      expect(projectsService.getProjectById).not.toHaveBeenCalled();
+      expect(save).not.toHaveBeenCalled();
+      const result = await projectsService.updateProjectStatus(
+        1,
+        ProjectStatus.CLOSED,
+      );
+      expect(projectsService.getProjectById).toHaveBeenCalled();
+      expect(save).toHaveBeenCalled();
+      expect(result.status).toEqual(ProjectStatus.CLOSED);
     });
   });
 });
