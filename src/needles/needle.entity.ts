@@ -28,6 +28,9 @@ export class Needle extends BaseEntity {
   @Column()
   environment: NeedleEnvironment;
 
+  @Column()
+  buildId: string;
+
   @ManyToOne(() => Project, (project) => project.needles, { eager: false })
   project: Project;
 }

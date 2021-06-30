@@ -19,4 +19,8 @@ export class GetNeedlesFilterDto {
   @IsOptional()
   @IsNotEmpty()
   search: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  buildId: string;
 }
